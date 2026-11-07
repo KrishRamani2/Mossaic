@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius, Shadow } from '../../src/constants/theme';
 import { useApp } from '../../src/context/AppContext';
 import { DEMO_PRODUCTS } from '../../src/data/demo-products';
@@ -90,13 +91,37 @@ export default function RoutineScreen() {
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>My Routine</Text>
+          <View>
+            <Text style={styles.eyebrow}>YOUR DAILY FLOW</Text>
+            <Text style={styles.headerTitle}>My Routine</Text>
+            <Text style={styles.headerSub}>A little consistency goes a long way.</Text>
+          </View>
           <TouchableOpacity
             style={styles.addRoutineBtn}
             onPress={() => router.push('/routine/builder')}
           >
-            <Text style={styles.addRoutineBtnText}>+ Add Activity</Text>
+            <Ionicons name="add" size={20} color={Colors.white} />
+            <Text style={styles.addRoutineBtnText}>Activity</Text>
           </TouchableOpacity>
+        </View>
+
+        <View style={styles.todayCard}>
+          <View style={styles.todayCopy}>
+            <Text style={styles.todayEyebrow}>TODAY&apos;S FOCUS</Text>
+            <Text style={styles.todayTitle}>
+              {todayStats.completed === todayStats.scheduled && todayStats.scheduled > 0
+                ? 'Routine complete.'
+                : 'Stay in your rhythm.'}
+            </Text>
+            <Text style={styles.todaySub}>
+              {todayStats.scheduled > 0
+                ? `${todayStats.completed} of ${todayStats.scheduled} activities completed`
+                : 'No activities scheduled yet'}
+            </Text>
+          </View>
+          <View style={styles.todayIcon}>
+            <Ionicons name="checkmark-done-outline" size={28} color={Colors.accent} />
+          </View>
         </View>
 
         {/* Week Mini Calendar */}
@@ -140,9 +165,10 @@ export default function RoutineScreen() {
 
         {/* Today's Progress */}
         <View style={styles.progressSection}>
-          <Text style={styles.progressTitle}>
-            Today: {todayStats.completed}/{todayStats.scheduled} completed
-          </Text>
+          <View style={styles.progressHeader}>
+            <Text style={styles.progressTitle}>Today&apos;s progress</Text>
+            <Text style={styles.progressValue}>{todayStats.completed}/{todayStats.scheduled}</Text>
+          </View>
           <View style={styles.progressTrack}>
             <View
               style={[
@@ -174,7 +200,13 @@ export default function RoutineScreen() {
 
         {/* Today's Routine Items */}
         <View style={styles.section}>
-          <SectionHeader title="Today's Activities" />
+          <View style={styles.sectionHeading}>
+            <View>
+              <Text style={styles.sectionTitle}>Today&apos;s Activities</Text>
+              <Text style={styles.sectionSub}>Your scheduled care, all in one place</Text>
+            </View>
+            <View style={styles.sectionIcon}><Ionicons name="sunny-outline" size={18} color={Colors.accent} /></View>
+          </View>
           {todayItems.length === 0 ? (
             <EmptyState
               emoji="☀️"
@@ -232,7 +264,13 @@ export default function RoutineScreen() {
 
         {/* My Routines */}
         <View style={styles.section}>
-          <SectionHeader title="My Routines" />
+          <View style={styles.sectionHeading}>
+            <View>
+              <Text style={styles.sectionTitle}>My Routines</Text>
+              <Text style={styles.sectionSub}>Manage your active plans</Text>
+            </View>
+            <View style={styles.sectionIcon}><Ionicons name="layers-outline" size={18} color={Colors.accent} /></View>
+          </View>
           {routines.length === 0 ? (
             <EmptyState
               emoji="📋"
@@ -339,7 +377,7 @@ export default function RoutineScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  scroll: { paddingBottom: Spacing[10] },
+  scroll: { paddingBottom: Spacing[4] },
 
   header: {
     flexDirection: 'row',
@@ -347,7 +385,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: Spacing[5],
     paddingTop: Spacing[5],
-    paddingBottom: Spacing[3],
+    paddingBottom: Spacing[4],
+  },
+  eyebrow: {
+    color: Colors.accent,
+    fontSize: 10,
+    fontWeight: Typography.fontWeight.bold,
+    letterSpacing: 1.2,
+    marginBottom: 5,
   },
   headerTitle: {
     fontSize: Typography.fontSize['2xl'],
@@ -355,16 +400,50 @@ const styles = StyleSheet.create({
     color: Colors.text,
     letterSpacing: -0.4,
   },
+  headerSub: { fontSize: Typography.fontSize.sm, color: Colors.textSecondary, marginTop: 4 },
   addRoutineBtn: {
     backgroundColor: Colors.accent,
-    borderRadius: Radius.md,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+    borderRadius: Radius.full,
+    paddingHorizontal: 13,
+    paddingVertical: 9,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   addRoutineBtnText: {
     color: Colors.white,
     fontSize: Typography.fontSize.sm,
     fontWeight: Typography.fontWeight.semibold,
+  },
+  todayCard: {
+    marginHorizontal: Spacing[5],
+    marginBottom: Spacing[4],
+    borderRadius: Radius.xl,
+    padding: Spacing[5],
+    backgroundColor: Colors.accentLight,
+    borderWidth: 1,
+    borderColor: '#D5E6DA',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  todayCopy: { flex: 1, paddingRight: Spacing[3] },
+  todayEyebrow: {
+    color: Colors.accent,
+    fontSize: 10,
+    fontWeight: Typography.fontWeight.bold,
+    letterSpacing: 1,
+    marginBottom: 6,
+  },
+  todayTitle: { color: Colors.text, fontSize: 21, fontWeight: Typography.fontWeight.bold },
+  todaySub: { color: Colors.textSecondary, fontSize: Typography.fontSize.xs, marginTop: 6 },
+  todayIcon: {
+    width: 58,
+    height: 58,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   weekCalendar: {
@@ -401,11 +480,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing[5],
     marginBottom: Spacing[4],
   },
+  progressHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 },
   progressTitle: {
     fontSize: Typography.fontSize.sm,
     color: Colors.textSecondary,
-    marginBottom: 6,
+    marginBottom: 0,
   },
+  progressValue: { color: Colors.accent, fontSize: Typography.fontSize.sm, fontWeight: Typography.fontWeight.bold },
   progressTrack: {
     height: 6,
     backgroundColor: Colors.border,
@@ -434,7 +515,23 @@ const styles = StyleSheet.create({
   rescueText: { flex: 1, fontSize: Typography.fontSize.sm, color: Colors.accent, fontWeight: Typography.fontWeight.medium },
   rescueArrow: { color: Colors.accent, fontSize: 18 },
 
-  section: { paddingHorizontal: Spacing[5], marginBottom: Spacing[6] },
+  section: { paddingHorizontal: Spacing[5], marginBottom: Spacing[5] },
+  sectionHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Spacing[3],
+  },
+  sectionTitle: { color: Colors.text, fontSize: Typography.fontSize.lg, fontWeight: Typography.fontWeight.bold },
+  sectionSub: { color: Colors.textSecondary, fontSize: Typography.fontSize.xs, marginTop: 3 },
+  sectionIcon: {
+    width: 34,
+    height: 34,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.accentLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   itemList: { gap: Spacing[3] },
 
   routineItem: {
@@ -447,9 +544,9 @@ const styles = StyleSheet.create({
     gap: Spacing[3],
     alignItems: 'center',
   },
-  itemImage: { width: 52, height: 52, borderRadius: Radius.md, backgroundColor: Colors.border },
+  itemImage: { width: 60, height: 60, borderRadius: Radius.lg, backgroundColor: Colors.border },
   itemContent: { flex: 1 },
-  itemName: { fontSize: Typography.fontSize.base, fontWeight: Typography.fontWeight.semibold, color: Colors.text },
+  itemName: { fontSize: Typography.fontSize.sm, fontWeight: Typography.fontWeight.semibold, color: Colors.text },
   itemFreq: { fontSize: Typography.fontSize.xs, color: Colors.textSecondary, marginBottom: 2 },
   itemTime: { fontSize: Typography.fontSize.xs, color: Colors.textSecondary },
   itemActions: { gap: 6, alignItems: 'flex-end' },
