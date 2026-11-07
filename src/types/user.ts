@@ -1,3 +1,9 @@
+export interface AppNotificationSettings {
+  morningEnabled: boolean;
+  eveningEnabled: boolean;
+  rescueEnabled: boolean;
+}
+
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system';
   reminderMorning: boolean;
@@ -7,6 +13,9 @@ export interface AppSettings {
   onboardingCompleted: boolean;
   isDemoMode: boolean;
   userName?: string;
+  notifications?: AppNotificationSettings;
+  showTips?: boolean;
+  showStreak?: boolean;
 }
 
 export const DEFAULT_SETTINGS: AppSettings = {
@@ -17,6 +26,13 @@ export const DEFAULT_SETTINGS: AppSettings = {
   selectedCategories: [],
   onboardingCompleted: false,
   isDemoMode: false,
+  notifications: {
+    morningEnabled: true,
+    eveningEnabled: true,
+    rescueEnabled: true,
+  },
+  showTips: true,
+  showStreak: true,
 };
 
 export interface OnboardingState {
