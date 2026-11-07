@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../../src/constants/theme';
 import { useApp } from '../../src/context/AppContext';
 import { DEMO_PRODUCTS, PRODUCT_CATALOGUE_CATEGORIES } from '../../src/data/demo-products';
@@ -83,8 +84,25 @@ export default function ProductsScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Products</Text>
-        <Text style={styles.headerSub}>Your personal product collection</Text>
+        <View>
+          <Text style={styles.eyebrow}>YOUR COLLECTION</Text>
+          <Text style={styles.headerTitle}>My Products</Text>
+          <Text style={styles.headerSub}>Thoughtfully chosen for your routine.</Text>
+        </View>
+        <View style={styles.headerIcon}>
+          <Ionicons name="bag-handle-outline" size={22} color={Colors.accent} />
+        </View>
+      </View>
+
+      <View style={styles.collectionSummary}>
+        <View style={styles.summaryIcon}>
+          <Ionicons name="sparkles-outline" size={22} color={Colors.accent} />
+        </View>
+        <View style={styles.summaryCopy}>
+          <Text style={styles.summaryTitle}>{myProductDetails.length} products in your collection</Text>
+          <Text style={styles.summaryText}>Build a routine that works for you.</Text>
+        </View>
+        <Text style={styles.summaryArrow}>→</Text>
       </View>
 
       {/* Tab Switcher */}
@@ -93,6 +111,7 @@ export default function ProductsScreen() {
           style={[styles.tab, activeTab === 'my' && styles.tabActive]}
           onPress={() => setActiveTab('my')}
         >
+          <Ionicons name="grid-outline" size={17} color={activeTab === 'my' ? Colors.accent : Colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'my' && styles.tabTextActive]}>
             My Collection ({myProductDetails.length})
           </Text>
@@ -101,6 +120,7 @@ export default function ProductsScreen() {
           style={[styles.tab, activeTab === 'catalogue' && styles.tabActive]}
           onPress={() => setActiveTab('catalogue')}
         >
+          <Ionicons name="storefront-outline" size={17} color={activeTab === 'catalogue' ? Colors.accent : Colors.textSecondary} />
           <Text style={[styles.tabText, activeTab === 'catalogue' && styles.tabTextActive]}>
             Catalogue
           </Text>
@@ -306,7 +326,21 @@ function ProductCard({
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  header: { paddingHorizontal: Spacing[5], paddingTop: Spacing[5], paddingBottom: Spacing[2] },
+  header: {
+    paddingHorizontal: Spacing[5],
+    paddingTop: Spacing[5],
+    paddingBottom: Spacing[4],
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  eyebrow: {
+    color: Colors.accent,
+    fontSize: 10,
+    fontWeight: Typography.fontWeight.bold,
+    letterSpacing: 1.2,
+    marginBottom: 5,
+  },
   headerTitle: {
     fontSize: Typography.fontSize['2xl'],
     fontWeight: Typography.fontWeight.bold,
@@ -314,18 +348,51 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
   },
   headerSub: { fontSize: Typography.fontSize.sm, color: Colors.textSecondary, marginTop: 4 },
+  headerIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: Radius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.accentLight,
+  },
+  collectionSummary: {
+    marginHorizontal: Spacing[5],
+    marginBottom: Spacing[4],
+    padding: Spacing[4],
+    borderRadius: Radius.xl,
+    backgroundColor: Colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  summaryIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: Radius.full,
+    backgroundColor: '#DDEBE2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: Spacing[3],
+  },
+  summaryCopy: { flex: 1 },
+  summaryTitle: { color: Colors.white, fontSize: Typography.fontSize.sm, fontWeight: Typography.fontWeight.bold },
+  summaryText: { color: '#CFE2D6', fontSize: Typography.fontSize.xs, marginTop: 4 },
+  summaryArrow: { color: Colors.white, fontSize: 22, marginLeft: Spacing[2] },
 
   tabRow: {
     flexDirection: 'row',
     paddingHorizontal: Spacing[5],
-    marginBottom: Spacing[2],
+    marginBottom: Spacing[4],
     gap: Spacing[2],
   },
   tab: {
     flex: 1,
-    paddingVertical: 10,
-    borderRadius: Radius.md,
+    paddingVertical: 11,
+    borderRadius: Radius.lg,
     alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 7,
     backgroundColor: Colors.surface,
     borderWidth: 1,
     borderColor: Colors.border,
@@ -384,7 +451,7 @@ const styles = StyleSheet.create({
   catLabelActive: { color: Colors.accent },
 
   catalogueScroll: { flex: 1 },
-  scroll: { paddingHorizontal: Spacing[5], paddingBottom: Spacing[10] },
+  scroll: { paddingHorizontal: Spacing[5], paddingBottom: Spacing[4] },
   grid: { gap: Spacing[3] },
 
   productCard: {
@@ -394,7 +461,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.border,
     overflow: 'hidden',
   },
-  productImage: { width: '100%', height: 160, backgroundColor: Colors.border },
+  productImage: { width: '100%', height: 150, backgroundColor: Colors.border },
   productBadge: {
     position: 'absolute',
     top: Spacing[2],
@@ -415,12 +482,12 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   demoBadgeText: { color: Colors.info, fontSize: Typography.fontSize.xs, fontWeight: Typography.fontWeight.semibold },
-  productInfo: { padding: Spacing[4], minHeight: 142 },
+  productInfo: { padding: Spacing[4], minHeight: 144 },
   productCatRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 4 },
   productCatEmoji: { fontSize: 12 },
   productCat: { fontSize: Typography.fontSize.xs, color: Colors.textSecondary, textTransform: 'capitalize' },
   productName: {
-    fontSize: Typography.fontSize.base,
+    fontSize: Typography.fontSize.sm,
     fontWeight: Typography.fontWeight.semibold,
     color: Colors.text,
     marginBottom: Spacing[2],
