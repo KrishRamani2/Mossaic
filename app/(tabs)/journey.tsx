@@ -10,6 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, Radius } from '../../src/constants/theme';
 import { useApp } from '../../src/context/AppContext';
 import {
@@ -81,8 +82,28 @@ export default function JourneyScreen() {
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>My Journey</Text>
-          <Text style={styles.headerSub}>Your personal care progress</Text>
+          <View>
+            <Text style={styles.eyebrow}>YOUR PROGRESS</Text>
+            <Text style={styles.headerTitle}>My Journey</Text>
+            <Text style={styles.headerSub}>Small habits, measured over time.</Text>
+          </View>
+          <View style={styles.headerIcon}>
+            <Ionicons name="trending-up-outline" size={22} color={Colors.accent} />
+          </View>
+        </View>
+
+        <View style={styles.overviewCard}>
+          <View style={styles.overviewCopy}>
+            <Text style={styles.overviewEyebrow}>30-DAY OVERVIEW</Text>
+            <Text style={styles.overviewTitle}>Keep showing up.</Text>
+            <Text style={styles.overviewText}>
+              You completed {totalCompleted} activities and stayed {overallConsistency}% consistent this month.
+            </Text>
+          </View>
+          <View style={styles.overviewRing}>
+            <Text style={styles.overviewValue}>{overallConsistency}%</Text>
+            <Text style={styles.overviewLabel}>consistent</Text>
+          </View>
         </View>
 
         {/* Summary Stats */}
@@ -95,7 +116,13 @@ export default function JourneyScreen() {
 
         {/* Week Chart */}
         <View style={styles.section}>
-          <SectionHeader title="This Week" />
+          <View style={styles.sectionHeading}>
+            <View>
+              <Text style={styles.sectionTitle}>This Week</Text>
+              <Text style={styles.sectionSub}>Your daily completion rate</Text>
+            </View>
+            <View style={styles.sectionIcon}><Ionicons name="bar-chart-outline" size={18} color={Colors.accent} /></View>
+          </View>
           <View style={styles.barChart}>
             {weekStats.map((stat) => {
               const pct = stat.scheduled > 0 ? (stat.completed / stat.scheduled) : 0;
@@ -125,7 +152,13 @@ export default function JourneyScreen() {
 
         {/* Monthly Heatmap */}
         <View style={styles.section}>
-          <SectionHeader title="Last 30 Days" />
+          <View style={styles.sectionHeading}>
+            <View>
+              <Text style={styles.sectionTitle}>Last 30 Days</Text>
+              <Text style={styles.sectionSub}>A snapshot of your consistency</Text>
+            </View>
+            <View style={styles.sectionIcon}><Ionicons name="grid-outline" size={18} color={Colors.accent} /></View>
+          </View>
           <View style={styles.heatmap}>
             {last30Days.map((stat) => {
               const pct = stat.scheduled > 0 ? stat.completed / stat.scheduled : -1;
@@ -162,7 +195,13 @@ export default function JourneyScreen() {
 
         {/* Weekly Consistency Trend */}
         <View style={styles.section}>
-          <SectionHeader title="Weekly Trend (4 Weeks)" />
+          <View style={styles.sectionHeading}>
+            <View>
+              <Text style={styles.sectionTitle}>Weekly Trend</Text>
+              <Text style={styles.sectionSub}>Your last four weeks</Text>
+            </View>
+            <View style={styles.sectionIcon}><Ionicons name="analytics-outline" size={18} color={Colors.accent} /></View>
+          </View>
           <View style={styles.trendRow}>
             {weeklyConsistency.map((week) => (
               <View key={week.weekLabel} style={styles.trendItem}>
@@ -314,9 +353,23 @@ function StatCard({ label, value, emoji, accent }: {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  scroll: { paddingBottom: Spacing[10] },
+  scroll: { paddingBottom: Spacing[4] },
 
-  header: { paddingHorizontal: Spacing[5], paddingTop: Spacing[5], paddingBottom: Spacing[4] },
+  header: {
+    paddingHorizontal: Spacing[5],
+    paddingTop: Spacing[5],
+    paddingBottom: Spacing[4],
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  eyebrow: {
+    color: Colors.accent,
+    fontSize: 10,
+    fontWeight: Typography.fontWeight.bold,
+    letterSpacing: 1.2,
+    marginBottom: 5,
+  },
   headerTitle: {
     fontSize: Typography.fontSize['2xl'],
     fontWeight: Typography.fontWeight.bold,
@@ -324,6 +377,48 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
   },
   headerSub: { fontSize: Typography.fontSize.sm, color: Colors.textSecondary, marginTop: 4 },
+  headerIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: Radius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.accentLight,
+  },
+
+  overviewCard: {
+    marginHorizontal: Spacing[5],
+    marginBottom: Spacing[4],
+    borderRadius: Radius.xl,
+    padding: Spacing[5],
+    backgroundColor: Colors.accent,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  overviewCopy: { flex: 1, paddingRight: Spacing[3] },
+  overviewEyebrow: {
+    color: '#B9D7C6',
+    fontSize: 10,
+    fontWeight: Typography.fontWeight.bold,
+    letterSpacing: 1,
+    marginBottom: 6,
+  },
+  overviewTitle: { color: Colors.white, fontSize: 22, fontWeight: Typography.fontWeight.bold, letterSpacing: -0.3 },
+  overviewText: { color: '#E5F0E9', fontSize: Typography.fontSize.xs, lineHeight: 18, marginTop: 7 },
+  overviewRing: {
+    width: 82,
+    height: 82,
+    borderRadius: Radius.full,
+    borderWidth: 7,
+    borderColor: '#4C8067',
+    borderTopColor: Colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  overviewValue: { color: Colors.white, fontSize: Typography.fontSize.lg, fontWeight: Typography.fontWeight.bold },
+  overviewLabel: { color: '#C8DFD1', fontSize: 9, marginTop: 1 },
 
   statsGrid: {
     flexDirection: 'row',
@@ -339,35 +434,51 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg,
     borderWidth: 1,
     borderColor: Colors.border,
-    padding: Spacing[4],
+    padding: Spacing[3],
     alignItems: 'center',
-    gap: 4,
+    gap: 3,
   },
   statCardAccent: { backgroundColor: Colors.accentLight, borderColor: Colors.accent },
-  statEmoji: { fontSize: 24 },
+  statEmoji: { fontSize: 21 },
   statValue: {
-    fontSize: Typography.fontSize['2xl'],
+    fontSize: Typography.fontSize.xl,
     fontWeight: Typography.fontWeight.bold,
     color: Colors.text,
   },
   statLabel: { fontSize: Typography.fontSize.xs, color: Colors.textSecondary, textAlign: 'center' },
 
-  section: { paddingHorizontal: Spacing[5], marginBottom: Spacing[6] },
+  section: { paddingHorizontal: Spacing[5], marginBottom: Spacing[5] },
+  sectionHeading: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: Spacing[3],
+  },
+  sectionTitle: { color: Colors.text, fontSize: Typography.fontSize.lg, fontWeight: Typography.fontWeight.bold },
+  sectionSub: { color: Colors.textSecondary, fontSize: Typography.fontSize.xs, marginTop: 3 },
+  sectionIcon: {
+    width: 34,
+    height: 34,
+    borderRadius: Radius.md,
+    backgroundColor: Colors.accentLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 
   barChart: {
     flexDirection: 'row',
-    height: 120,
+    height: 142,
     backgroundColor: Colors.surface,
     borderRadius: Radius.lg,
     borderWidth: 1,
     borderColor: Colors.border,
-    padding: Spacing[4],
+    padding: Spacing[3],
     gap: Spacing[2],
     alignItems: 'flex-end',
   },
   barCol: { flex: 1, alignItems: 'center', height: '100%', justifyContent: 'flex-end' },
   barPct: { fontSize: 9, color: Colors.textMuted, marginBottom: 4 },
-  barTrack: { width: '70%', height: '75%', backgroundColor: Colors.border, borderRadius: 4, overflow: 'hidden', justifyContent: 'flex-end' },
+  barTrack: { width: '58%', height: '75%', backgroundColor: '#E9EFEB', borderRadius: 6, overflow: 'hidden', justifyContent: 'flex-end' },
   barFill: { width: '100%', borderRadius: 4 },
   barDay: { fontSize: Typography.fontSize.xs, color: Colors.textSecondary, marginTop: 4 },
 
@@ -379,9 +490,9 @@ const styles = StyleSheet.create({
     borderRadius: Radius.lg,
     borderWidth: 1,
     borderColor: Colors.border,
-    padding: Spacing[4],
+    padding: Spacing[3],
   },
-  heatCell: { width: 20, height: 20, borderRadius: 4 },
+  heatCell: { width: 20, height: 20, borderRadius: 6 },
   heatLegend: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -394,17 +505,17 @@ const styles = StyleSheet.create({
 
   trendRow: {
     flexDirection: 'row',
-    height: 100,
+    height: 128,
     backgroundColor: Colors.surface,
     borderRadius: Radius.lg,
     borderWidth: 1,
     borderColor: Colors.border,
-    padding: Spacing[4],
+    padding: Spacing[3],
     gap: Spacing[4],
     alignItems: 'flex-end',
   },
   trendItem: { flex: 1, alignItems: 'center', height: '100%', justifyContent: 'flex-end' },
-  trendBarTrack: { width: '50%', height: '65%', backgroundColor: Colors.border, borderRadius: 4, overflow: 'hidden', justifyContent: 'flex-end' },
+  trendBarTrack: { width: '44%', height: '65%', backgroundColor: '#E9EFEB', borderRadius: 6, overflow: 'hidden', justifyContent: 'flex-end' },
   trendBarFill: { width: '100%', borderRadius: 4 },
   trendPct: { fontSize: 10, color: Colors.textSecondary, marginTop: 4 },
   trendLabel: { fontSize: Typography.fontSize.xs, color: Colors.textSecondary, fontWeight: Typography.fontWeight.medium },
